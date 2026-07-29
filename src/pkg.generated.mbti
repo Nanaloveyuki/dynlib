@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Nanaloveyuki/dynlib"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn load(String) -> Result[Library, DynlibError]
+
+// Errors
+
+// Types and methods
+pub(all) enum DynlibError {
+  InvalidLibraryPath
+  InvalidSymbolName
+  LoadFailed
+  SymbolNotFound(String)
+  CloseFailed
+  Closed
+} derive(Eq, @debug.Debug)
+
+pub struct Library {
+  // private fields
+}
+pub fn Library::close(Self) -> Result[Unit, DynlibError]
+pub fn Library::is_open(Self) -> Bool
+pub fn Library::resolve(Self, String) -> Result[Symbol, DynlibError]
+
+pub struct Symbol {
+  // private fields
+}
+pub fn Symbol::address(Self) -> Result[UInt64, DynlibError]
+
+// Type aliases
+
+// Traits
+
