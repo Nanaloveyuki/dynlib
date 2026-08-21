@@ -12,7 +12,8 @@
 
 A pull request must meet all of these requirements before it is merged:
 
-- The Windows, Linux, and macOS validation checks pass.
+- The Windows, Linux, and macOS native validation checks pass.
+- The `wasm`, `wasm-gc`, and `js` check/test jobs pass.
 - At least one project reviewer leaves an explicit `LGTM` on the pull request.
 - The pull request author cannot supply the required `LGTM`.
 

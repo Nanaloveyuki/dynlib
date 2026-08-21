@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: dynlib-validation-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   native:
     name: native (${{ matrix.os }})
@@ -31,8 +38,39 @@ jobs:
           Invoke-RestMethod https://cli.moonbitlang.com/install/powershell.ps1 | Invoke-Expression
           "$HOME\\.moon\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Show toolchain
+        run: moon version --all
+
       - run: moon fmt --check
       - run: moon check --target native --deny-warn --warn-list +73
       - run: moon test --target native --deny-warn --warn-list +73
       - run: moon info
       - run: git diff --exit-code
+
+  cross-targets:
+    name: ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [wasm, wasm-gc, js]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Show toolchain
+        shell: bash
+        run: moon version --all
+
+      - name: Check target
+        shell: bash
+        run: moon check --target "${{ matrix.target }}" --deny-warn --warn-list +73
+
+      - name: Test target
+        shell: bash
+        run: moon test --target "${{ matrix.target }}" --deny-warn --warn-list +73
