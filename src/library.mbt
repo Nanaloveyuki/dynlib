@@ -1,10 +1,15 @@
 ///|
-/// A failure produced while loading, resolving, or closing a native library.
+/// A failure produced while loading, resolving, or closing a dynamic library.
 pub(all) enum DynlibError {
+  UnsupportedTarget
   InvalidLibraryPath
   InvalidSymbolName
+  InvalidUtf8
+  OutOfMemory
   LoadFailed
+  ResolveFailed
   SymbolNotFound(String)
+  InvalidHandle
   CloseFailed
   Closed
 } derive(Eq, Debug)
@@ -14,7 +19,8 @@ pub(all) enum DynlibError {
 ///
 /// Call close when the library is no longer needed. Closing is idempotent.
 pub struct Library {
-  priv mut handle : UInt64
+  priv handle : NativeHandle
+  priv mut closed : Bool
 }
 
 ///|
@@ -23,7 +29,7 @@ pub struct Library {
 /// The address cannot be obtained after the source library is closed.
 pub struct Symbol {
   priv library : Library
-  priv address : UInt64
+  priv address : NativeAddress
 }
 
 ///|
@@ -37,6 +43,55 @@ fn encode_utf8(value : String) -> Bytes {
 }
 
 ///|
+fn load_error(code : Int) -> DynlibError {
+  if code == ffi_error_unsupported_target {
+    UnsupportedTarget
+  } else if code == ffi_error_invalid_argument {
+    InvalidLibraryPath
+  } else if code == ffi_error_invalid_utf8 {
+    InvalidUtf8
+  } else if code == ffi_error_out_of_memory {
+    OutOfMemory
+  } else if code == ffi_error_load_failed {
+    LoadFailed
+  } else {
+    LoadFailed
+  }
+}
+
+///|
+fn resolve_error(code : Int, name : String) -> DynlibError {
+  if code == ffi_error_unsupported_target {
+    UnsupportedTarget
+  } else if code == ffi_error_invalid_argument {
+    InvalidSymbolName
+  } else if code == ffi_error_invalid_utf8 {
+    InvalidUtf8
+  } else if code == ffi_error_out_of_memory {
+    OutOfMemory
+  } else if code == ffi_error_invalid_handle {
+    InvalidHandle
+  } else if code == ffi_error_symbol_not_found {
+    SymbolNotFound(name)
+  } else {
+    ResolveFailed
+  }
+}
+
+///|
+fn close_error(code : Int) -> DynlibError {
+  if code == ffi_error_unsupported_target {
+    UnsupportedTarget
+  } else if code == ffi_error_invalid_handle {
+    InvalidHandle
+  } else if code == ffi_error_close_failed {
+    CloseFailed
+  } else {
+    CloseFailed
+  }
+}
+
+///|
 /// Loads a dynamic library by absolute path or platform loader name.
 ///
 /// Paths are encoded as UTF-8. On Windows they are converted to UTF-16 before
@@ -46,17 +101,17 @@ pub fn load(path : String) -> Result[Library, DynlibError] {
     return Err(InvalidLibraryPath)
   }
   let handle = native_load(encode_utf8(path))
-  if handle == 0UL {
-    Err(LoadFailed)
+  if native_is_null(handle) {
+    Err(load_error(native_last_error()))
   } else {
-    Ok({ handle, })
+    Ok({ handle, closed: false })
   }
 }
 
 ///|
 /// Returns whether this library remains open.
 pub fn Library::is_open(self : Library) -> Bool {
-  self.handle != 0UL
+  !self.closed
 }
 
 ///|
@@ -75,8 +130,8 @@ pub fn Library::resolve(
     return Err(InvalidSymbolName)
   }
   let address = native_resolve(self.handle, encode_utf8(name))
-  if address == 0UL {
-    Err(SymbolNotFound(name))
+  if native_address_is_null(address) {
+    Err(resolve_error(native_last_error(), name))
   } else {
     Ok({ library: self, address })
   }
@@ -88,7 +143,7 @@ pub fn Library::resolve(
 /// The caller must not retain or invoke the address after Library::close.
 pub fn Symbol::address(self : Symbol) -> Result[UInt64, DynlibError] {
   if self.library.is_open() {
-    Ok(self.address)
+    Ok(native_address_value(self.address))
   } else {
     Err(Closed)
   }
@@ -101,10 +156,11 @@ pub fn Library::close(self : Library) -> Result[Unit, DynlibError] {
   if !self.is_open() {
     return Ok(())
   }
-  if native_close(self.handle) {
-    self.handle = 0UL
+  let status = native_close(self.handle)
+  if status == ffi_error_ok {
+    self.closed = true
     Ok(())
   } else {
-    Err(CloseFailed)
+    Err(close_error(status))
   }
 }

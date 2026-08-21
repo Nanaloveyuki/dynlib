@@ -12,10 +12,15 @@ pub fn load(String) -> Result[Library, DynlibError]
 
 // Types and methods
 pub(all) enum DynlibError {
+  UnsupportedTarget
   InvalidLibraryPath
   InvalidSymbolName
+  InvalidUtf8
+  OutOfMemory
   LoadFailed
+  ResolveFailed
   SymbolNotFound(String)
+  InvalidHandle
   CloseFailed
   Closed
 } derive(Eq, @debug.Debug)
@@ -35,4 +40,3 @@ pub fn Symbol::address(Self) -> Result[UInt64, DynlibError]
 // Type aliases
 
 // Traits
-

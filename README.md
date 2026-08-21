@@ -1,7 +1,9 @@
 # dynlib
 
-`Nanaloveyuki/dynlib` is a native-only MoonBit package for loading dynamic
-libraries on Windows, Linux, and macOS.
+`Nanaloveyuki/dynlib` is a MoonBit package for loading dynamic libraries on
+native targets. The package also compiles for `js`, `wasm`, and `wasm-gc`; those
+targets return `UnsupportedTarget` because their runtime does not provide the
+native dynamic-library loader used by this API.
 
 ## Install
 
@@ -9,11 +11,12 @@ Add the package to your `moon.mod`:
 
 ```moonbit
 import {
-  "Nanaloveyuki/dynlib@0.1.0",
+  "Nanaloveyuki/dynlib@0.2.0",
 }
 ```
 
-Build the consuming package for the native target.
+Build the consuming package for a native target to load libraries. Cross-target
+builds remain available when the package is part of a shared library.
 
 ## Load, Resolve, and Read an Address
 
@@ -43,6 +46,11 @@ ignore(address)
 `dynlib` does not invoke resolved symbols. The consuming package owns the FFI
 signature and calling convention.
 
+`DynlibError` does not include operating-system diagnostic strings or requested
+paths. Handle `InvalidLibraryPath`, `InvalidSymbolName`, `LoadFailed`,
+`ResolveFailed`, `SymbolNotFound`, `OutOfMemory`, `InvalidUtf8`, and
+`UnsupportedTarget` explicitly when the distinction matters.
+
 ## Close
 
 Close each loaded library at a deterministic shutdown point:
@@ -53,4 +61,5 @@ ignore(library.close())
 
 `Library::close` is idempotent. After it succeeds, `Library::resolve` and
 `Symbol::address` return `Closed`; do not retain or use a previously returned
-address.
+address. Do not call `resolve`, `address`, or `close` concurrently for the same
+library; the package does not provide a synchronization or symbol lease API.
