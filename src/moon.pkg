@@ -2,12 +2,17 @@ import {
   "moonbitlang/core/encoding/utf8",
 }
 
+import {
+  "moonbitlang/core/quickcheck",
+} for "test"
+
 options(
   "native-stub": [ "dynlib.c" ],
   targets: {
     "ffi.mbt": [ "native", "llvm" ],
     "ffi_stub.mbt": [ "js", "wasm", "wasm-gc" ],
     "library_test.mbt": [ "native", "llvm" ],
+    "library_native_property_test.mbt": [ "native", "llvm" ],
     "library_cross_target_test.mbt": [ "js", "wasm", "wasm-gc" ],
   },
 )
