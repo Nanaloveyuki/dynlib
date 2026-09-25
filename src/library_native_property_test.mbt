@@ -1,6 +1,6 @@
 ///|
 fn lifecycle_sequence_holds(actions : Array[Int]) -> Bool {
-  let library = match load(platform_library_for_test()) {
+  let library = match @dynlib.load(platform_library_for_test()) {
     Ok(value) => value
     Err(_) => return false
   }
@@ -67,7 +67,7 @@ test "generated NUL symbols are rejected without closing the library" {
   @quickcheck.check(
     (input : (String, String, Bool)) => {
       let (prefix, suffix, at_start) = input
-      let library = match load(platform_library_for_test()) {
+      let library = match @dynlib.load(platform_library_for_test()) {
         Ok(value) => value
         Err(_) => return false
       }
@@ -91,7 +91,7 @@ test "generated NUL symbols are rejected without closing the library" {
 test "generated missing symbols preserve the requested name" {
   @quickcheck.check(
     (suffix : String) => {
-      let library = match load(platform_library_for_test()) {
+      let library = match @dynlib.load(platform_library_for_test()) {
         Ok(value) => value
         Err(_) => return false
       }

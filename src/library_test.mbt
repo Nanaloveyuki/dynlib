@@ -24,7 +24,7 @@ fn platform_symbol_for_test() -> String {
 test "load and resolve a platform library" {
   let library_name = platform_library_for_test()
   let symbol_name = platform_symbol_for_test()
-  let library = match load(library_name) {
+  let library = match @dynlib.load(library_name) {
     Ok(value) => value
     Err(_) => abort("could not load test library")
   }
@@ -46,15 +46,15 @@ test "load and resolve a platform library" {
 
 ///|
 test "reject invalid names before native calls" {
-  match load("") {
+  match @dynlib.load("") {
     Err(InvalidLibraryPath) => ()
     _ => abort("empty path should be rejected")
   }
-  match load("bad\u{0000}name") {
+  match @dynlib.load("bad\u{0000}name") {
     Err(InvalidLibraryPath) => ()
     _ => abort("NUL path should be rejected")
   }
-  let library = match load(platform_library_for_test()) {
+  let library = match @dynlib.load(platform_library_for_test()) {
     Ok(value) => value
     Err(_) => abort("could not load test library")
   }
@@ -71,11 +71,11 @@ test "reject invalid names before native calls" {
 
 ///|
 test "report loader and resolver failures" {
-  match load("dynlib-definitely-missing-library") {
+  match @dynlib.load("dynlib-definitely-missing-library") {
     Err(LoadFailed) => ()
     _ => abort("expected load failure")
   }
-  let library = match load(platform_library_for_test()) {
+  let library = match @dynlib.load(platform_library_for_test()) {
     Ok(value) => value
     Err(_) => abort("could not load test library")
   }

@@ -11,7 +11,7 @@ priv struct NativeAddress {
 ///|
 fn native_load(path : Bytes) -> NativeHandle {
   ignore(path)
-  { raw: 0UL }
+  { raw: 0UL, }
 }
 
 ///|
@@ -23,7 +23,7 @@ fn native_is_null(value : NativeHandle) -> Bool {
 fn native_resolve(handle : NativeHandle, name : Bytes) -> NativeAddress {
   ignore(handle)
   ignore(name)
-  { raw: 0UL }
+  { raw: 0UL, }
 }
 
 ///|

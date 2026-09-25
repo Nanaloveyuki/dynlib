@@ -17,7 +17,7 @@ test "generated NUL paths are rejected before target dispatch" {
     (input : (String, String, Bool)) => {
       let (prefix, suffix, at_start) = input
       let path = property_name_with_nul(prefix, suffix, at_start)
-      match load(path) {
+      match @dynlib.load(path) {
         Err(InvalidLibraryPath) => true
         _ => false
       }
@@ -33,7 +33,7 @@ test "generated NUL paths are rejected before target dispatch" {
 test "generated valid paths are not classified as malformed" {
   @quickcheck.check(
     (path : String) => {
-      match load(path) {
+      match @dynlib.load(path) {
         Err(InvalidLibraryPath) | Err(InvalidUtf8) => false
         Ok(library) => library.close() == Ok(())
         Err(_) => true

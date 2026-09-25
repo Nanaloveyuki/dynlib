@@ -15,6 +15,19 @@ pub(all) enum DynlibError {
 } derive(Eq, Debug)
 
 ///|
+pub extend DynlibError with Eq::{equal}
+
+///|
+#deprecated("Use `!=` instead", skip_current_package=true)
+#doc(hidden)
+pub extend DynlibError with Eq::{not_equal}
+
+///|
+#deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+#doc(hidden)
+pub extend DynlibError with @debug.Debug::{to_repr}
+
+///|
 /// An explicitly owned native dynamic-library handle.
 ///
 /// Call close when the library is no longer needed. Closing is idempotent.
@@ -104,7 +117,7 @@ pub fn load(path : String) -> Result[Library, DynlibError] {
   if native_is_null(handle) {
     Err(load_error(native_last_error()))
   } else {
-    Ok({ handle, closed: false })
+    Ok({ handle, closed: false, })
   }
 }
 
@@ -133,7 +146,7 @@ pub fn Library::resolve(
   if native_address_is_null(address) {
     Err(resolve_error(native_last_error(), name))
   } else {
-    Ok({ library: self, address })
+    Ok({ library: self, address, })
   }
 }
 
