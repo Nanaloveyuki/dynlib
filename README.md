@@ -11,7 +11,7 @@ Add the package to your `moon.mod`:
 
 ```moonbit
 import {
-  "Nanaloveyuki/dynlib@0.2.1",
+  "Nanaloveyuki/dynlib@0.2.2",
 }
 ```
 

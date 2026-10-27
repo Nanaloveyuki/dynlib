@@ -8,7 +8,7 @@ compiler `0.10.17+d971670cd` (2026-10-23), with CLI
 native compiler and the platform's system loader. The package is expected to
 compile for `native`, `wasm`, `wasm-gc`, and `js`.
 
-### Unreleased toolchain update
+### 0.2.2 - 2026-10-27
 
 Local development and every Unix/Windows CI installer now use the exact release
 in `.moonbit-toolchain`; library APIs and dependency versions are unchanged.
