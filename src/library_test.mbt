@@ -1,5 +1,5 @@
 ///|
-extern "C" fn native_platform() -> Int = "dynlib_platform"
+extern "C" fn native_platform() -> Int32 = "dynlib_platform"
 
 ///|
 fn platform_library_for_test() -> String {

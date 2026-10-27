@@ -56,7 +56,7 @@ fn encode_utf8(value : String) -> Bytes {
 }
 
 ///|
-fn load_error(code : Int) -> DynlibError {
+fn load_error(code : Int32) -> DynlibError {
   if code == ffi_error_unsupported_target {
     UnsupportedTarget
   } else if code == ffi_error_invalid_argument {
@@ -73,7 +73,7 @@ fn load_error(code : Int) -> DynlibError {
 }
 
 ///|
-fn resolve_error(code : Int, name : String) -> DynlibError {
+fn resolve_error(code : Int32, name : String) -> DynlibError {
   if code == ffi_error_unsupported_target {
     UnsupportedTarget
   } else if code == ffi_error_invalid_argument {
@@ -92,7 +92,7 @@ fn resolve_error(code : Int, name : String) -> DynlibError {
 }
 
 ///|
-fn close_error(code : Int) -> DynlibError {
+fn close_error(code : Int32) -> DynlibError {
   if code == ffi_error_unsupported_target {
     UnsupportedTarget
   } else if code == ffi_error_invalid_handle {

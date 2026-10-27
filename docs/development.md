@@ -2,9 +2,16 @@
 
 ## Prerequisites
 
-Install a current MoonBit toolchain. Native loader tests require a native
-compiler and the platform's system loader. The package is expected to compile
-for `native`, `wasm`, `wasm-gc`, and `js`.
+Use the exact MoonBit release recorded in `.moonbit-toolchain`:
+compiler `0.10.17+d971670cd` (2026-10-23), with CLI
+`moon 0.1.20261023` (`3778465`, 2026-10-23). Native loader tests require a
+native compiler and the platform's system loader. The package is expected to
+compile for `native`, `wasm`, `wasm-gc`, and `js`.
+
+### Unreleased toolchain update
+
+Local development and every Unix/Windows CI installer now use the exact release
+in `.moonbit-toolchain`; library APIs and dependency versions are unchanged.
 
 ## Local validation
 
@@ -69,9 +76,9 @@ moon check --target llvm --deny-warn --warn-list +73
 moon build --target llvm --release --deny-warn --warn-list +73
 ```
 
-MoonBit 0.10.9 can still report `LLVM backend is disabled` when `moon test`
-tries to link an LLVM test executable. Treat that as a toolchain limitation;
-the package's LLVM check/build path remains valid.
+LLVM test executable support depends on an LLVM-enabled toolchain. If linking
+reports `LLVM backend is disabled`, treat LLVM as an unavailable optional target
+and retain the required native, wasm, wasm-gc, and JS validation matrix.
 
 Do not return platform diagnostics or requested library paths through the public
 error type. Preserve the explicit error classes for invalid input, target

@@ -1,5 +1,5 @@
 ///|
-fn lifecycle_sequence_holds(actions : Array[Int]) -> Bool {
+fn lifecycle_sequence_holds(actions : Array[Int32]) -> Bool {
   let library = match @dynlib.load(platform_library_for_test()) {
     Ok(value) => value
     Err(_) => return false
@@ -54,7 +54,7 @@ fn lifecycle_sequence_holds(actions : Array[Int]) -> Bool {
 ///|
 test "generated lifecycle sequences preserve handle state" {
   @quickcheck.check(
-    (actions : Array[Int]) => lifecycle_sequence_holds(actions),
+    (actions : Array[Int32]) => lifecycle_sequence_holds(actions),
     count=128,
     max_size=96,
     max_shrinks=192,

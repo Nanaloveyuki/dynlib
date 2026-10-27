@@ -37,12 +37,12 @@ fn native_address_value(value : NativeAddress) -> UInt64 {
 }
 
 ///|
-fn native_close(handle : NativeHandle) -> Int {
+fn native_close(handle : NativeHandle) -> Int32 {
   ignore(handle)
   ffi_error_unsupported_target
 }
 
 ///|
-fn native_last_error() -> Int {
+fn native_last_error() -> Int32 {
   ffi_error_unsupported_target
 }

@@ -31,7 +31,7 @@ extern "C" fn native_address_value(value : NativeAddress) -> UInt64 = "dynlib_ad
 
 ///|
 #borrow(handle)
-extern "C" fn native_close(handle : NativeHandle) -> Int = "dynlib_close"
+extern "C" fn native_close(handle : NativeHandle) -> Int32 = "dynlib_close"
 
 ///|
-extern "C" fn native_last_error() -> Int = "dynlib_last_error"
+extern "C" fn native_last_error() -> Int32 = "dynlib_last_error"
