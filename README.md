@@ -11,7 +11,7 @@ Add the package to your `moon.mod`:
 
 ```moonbit
 import {
-  "Nanaloveyuki/dynlib@0.2.2",
+  "Nanaloveyuki/dynlib@0.2.3",
 }
 ```
 
@@ -63,3 +63,9 @@ ignore(library.close())
 `Symbol::address` return `Closed`; do not retain or use a previously returned
 address. Do not call `resolve`, `address`, or `close` concurrently for the same
 library; the package does not provide a synchronization or symbol lease API.
+
+## Development
+
+Release `0.2.3` uses compiler `0.10.19+97801ee1b` (2026-10-30) and
+CLI `moon 0.1.20261029`. See [docs/development.md](docs/development.md)
+for the native and cross-target validation matrix.
