@@ -1,5 +1,6 @@
 ///|
 /// A failure produced while loading, resolving, or closing a dynamic library.
+#derive(Eq, Debug)
 pub(all) enum DynlibError {
   UnsupportedTarget
   InvalidLibraryPath
@@ -12,7 +13,7 @@ pub(all) enum DynlibError {
   InvalidHandle
   CloseFailed
   Closed
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend DynlibError with Eq::{equal}

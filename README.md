@@ -11,7 +11,7 @@ Add the package to your `moon.mod`:
 
 ```moonbit
 import {
-  "Nanaloveyuki/dynlib@0.2.3",
+  "Nanaloveyuki/dynlib@0.2.4",
 }
 ```
 
@@ -66,6 +66,6 @@ library; the package does not provide a synchronization or symbol lease API.
 
 ## Development
 
-Release `0.2.3` uses compiler `0.10.19+97801ee1b` (2026-10-30) and
-CLI `moon 0.1.20261029`. See [docs/development.md](docs/development.md)
+Release `0.2.4` uses compiler `0.10.20+65efd5b93` (2026-11-05) and
+CLI `moon 0.1.20261104`. See [docs/development.md](docs/development.md)
 for the native and cross-target validation matrix.

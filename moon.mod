@@ -1,6 +1,6 @@
 name = "Nanaloveyuki/dynlib"
 
-version = "0.2.3"
+version = "0.2.4"
 
 description = "Checked dynamic library loading for MoonBit native targets."
 
