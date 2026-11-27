@@ -3,8 +3,8 @@
 ## Prerequisites
 
 Use the exact MoonBit release recorded in `.moonbit-toolchain`:
-compiler `0.10.20+65efd5b93` (2026-11-05), with CLI
-`moon 0.1.20261104`. Native loader tests require a
+compiler `1.0.0-rc1+3c0520448` (2026-11-26), with CLI
+`moon 0.1.20261126`. Native loader tests require a
 native compiler and the platform's system loader. The package is expected to
 compile for `native`, `wasm`, `wasm-gc`, and `js`.
 
